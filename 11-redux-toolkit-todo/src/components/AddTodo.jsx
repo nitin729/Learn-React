@@ -7,6 +7,7 @@ const AddTodo = () => {
   const dispatch = useDispatch();
 
   const addTodoHandler = (e) => {
+    if (!input) return;
     e.preventDefault();
     dispatch(addTodo(input));
     setInput("");
@@ -14,15 +15,18 @@ const AddTodo = () => {
 
   return (
     <>
-      <form onSubmit={addTodoHandler}>
-        <input
-          type="text"
-          placeholder="Add a todo..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <button>Add Todo</button>
-      </form>
+      <div className="flex flex-row w-full justify-center align-items-center mt-8">
+        <form onSubmit={addTodoHandler}>
+          <input
+            className="mx-4 p-1 border"
+            type="text"
+            placeholder="Add a todo..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <button className="bg-gray-500 rounded-sm p-1">Add Todo</button>
+        </form>
+      </div>
     </>
   );
 };
