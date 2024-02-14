@@ -13,7 +13,7 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
-  async createPost({ title, slug, content, featuredImage, status, userId }) {
+  async createPost({ title, slug, content, featuredimage, status, userid }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
@@ -22,9 +22,9 @@ export class Service {
         {
           title,
           content,
-          featuredImage,
+          featuredimage,
           status,
-          userId,
+          userid,
         }
       );
     } catch (error) {
@@ -83,12 +83,12 @@ export class Service {
   }
 
   //file upload serivce
-  async uploadFile(fileBlob) {
+  async uploadFile(file) {
     try {
       return await this.bucket.createFile(
         conf.appwriteBucketId,
         ID.unique(),
-        fileBlob
+        file
       );
     } catch (error) {
       console.log(error);

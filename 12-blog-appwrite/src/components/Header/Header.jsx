@@ -3,7 +3,7 @@ import { Container, Logo, LogoutBtn } from "../index";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 const Header = () => {
-  const authStatus = useSelector((state) => state.status);
+  const authStatus = useSelector((state) => state.auth.status);
   const navigate = useNavigate();
   const navItems = [
     {
