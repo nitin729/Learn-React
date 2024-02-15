@@ -98,7 +98,7 @@ export class Service {
 
   async deleteFile(fileId) {
     try {
-      await this.bucket.createFile(conf.appwriteBucketId, fileId);
+      await this.bucket.deleteFile(conf.appwriteBucketId, fileId);
       return true;
     } catch (error) {
       console.log(error);
@@ -107,7 +107,6 @@ export class Service {
   }
 
   getFilePreview(fileId) {
-    console.log(this.bucket.getFilePreview(conf.appwriteBucketId, fileId));
     return this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
   }
 }

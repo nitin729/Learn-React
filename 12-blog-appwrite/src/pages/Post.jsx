@@ -1,46 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import service from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getPost, deletePosts } from "../store/features/postSlice";
 
 export default function Post() {
-  const [post, setPost] = useState(null);
+  const post = useSelector((state) => state.post.post);
   const { slug } = useParams();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.userData);
-
   const isAuthor = post && userData ? post.userid === userData.$id : false;
+  const imagePreview =
+    post && post.featuredimage
+      ? service.getFilePreview(post.featuredimage)
+      : "";
 
   useEffect(() => {
     if (slug) {
-      service.getPost(slug).then((post) => {
-        if (post) setPost(post);
-        else navigate("/");
-      });
-    } else navigate("/");
-  }, [slug, navigate]);
+      dispatch(getPost(slug)); /* .then(() => navigate("/")) */
+    } else {
+      navigate("/");
+    }
+  }, [slug, navigate, dispatch]);
 
   const deletePost = () => {
-    service.deletePost(post.$id).then((status) => {
-      if (status) {
-        service.deleteFile(post.featuredimage);
-        navigate("/");
-      }
-    });
+    dispatch(deletePosts(post)).then(() => navigate("/"));
   };
 
   return post ? (
     <div className="py-8">
       <Container>
         <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
-          <img
-            src={service.getFilePreview(post.featuredimage)}
-            alt={post.title}
-            className="rounded-xl"
-          />
+          <img src={imagePreview} alt={post.title} className="rounded-xl" />
 
           {isAuthor && (
             <div className="absolute right-6 top-6">
@@ -58,7 +52,7 @@ export default function Post() {
         <div className="w-full mb-6">
           <h1 className="text-2xl font-bold">{post.title}</h1>
         </div>
-        <div className="browser-css">{parse(post.content)}</div>
+        <div className="browser-css">{parse("sa")}</div>
       </Container>
     </div>
   ) : null;

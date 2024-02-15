@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import authService from "./appwrite/auth";
 import { login, logout } from "./store/features/authSlice";
 import "./App.css";
+import { postsThunk } from "./store/features/postSlice";
 import { Header, Footer } from "./components/index";
 import { Outlet } from "react-router-dom";
 
@@ -16,6 +17,7 @@ function App() {
       .then((userData) => {
         if (userData) {
           dispatch(login(userData));
+          dispatch(postsThunk());
         } else {
           dispatch(logout());
         }

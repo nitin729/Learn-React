@@ -1,17 +1,14 @@
-import service from "../appwrite/config";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Card, Container } from "../components/index";
+import { useDispatch, useSelector } from "react-redux";
+import { postsThunk } from "../store/features/postSlice";
 
 const AllPosts = () => {
-  const [posts, setPosts] = useState([]);
+  const posts = useSelector((state) => state.post.posts);
+  const dispatch = useDispatch();
   useEffect(() => {
-    service.getAllPosts().then((posts) => {
-      if (posts) {
-        setPosts(posts.documents);
-      }
-    });
-  }, []);
-  console.log(posts);
+    dispatch(postsThunk());
+  }, [dispatch]);
   return (
     <div className="w-full py-8">
       <Container>

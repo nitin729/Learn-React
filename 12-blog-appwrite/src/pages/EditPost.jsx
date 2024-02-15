@@ -1,28 +1,25 @@
-import service from "../appwrite/config";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { PostForm, Container } from "../components/index";
+import { useDispatch, useSelector } from "react-redux";
+import { getPost } from "../store/features/postSlice";
 const EditPost = () => {
-  const [posts, setPosts] = useState(null);
   const { slug } = useParams();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const post = useSelector((state) => state.post.post);
   useEffect(() => {
     if (slug) {
-      service.getPost(slug).then((post) => {
-        if (post) {
-          setPosts(post);
-        }
-      });
+      dispatch(getPost(slug));
     } else {
       navigate("/");
     }
-  }, [slug, navigate]);
-  return posts ? (
+  }, [slug, navigate, dispatch]);
+  return post ? (
     <div>
       <div className="py-8">
         <Container>
-          <PostForm post={posts} />
+          <PostForm post={post} />
         </Container>
       </div>
     </div>

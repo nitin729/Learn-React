@@ -14,7 +14,6 @@ const AuthGuard = ({ children, authentication = true }) => {
       navigate("/login");
     }
  */
-    console.log(authStatus, authentication);
     if (authentication && authStatus !== authentication) {
       navigate("/login");
     } else if (!authentication && authStatus !== authentication) {

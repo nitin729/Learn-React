@@ -3,23 +3,57 @@ import { useForm } from "react-hook-form";
 import { Button, Input, Select, RTE } from "../index";
 import service from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addPosts, editPost } from "../../store/features/postSlice";
 
 const PostForm = ({ post }) => {
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
         featuredimage: post?.featuredimage || null,
       },
     });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.userData);
-  const submit = async (data) => {
-    try {
+  const postId = useSelector((state) => state.post.postId);
+  const imagePreview =
+    post && post.featuredimage
+      ? service.getFilePreview(post.featuredimage)
+      : "";
+  const submit = (data) => {
+    if (post) {
+      dispatch(editPost({ data, post })).then(() =>
+        navigate(`/post/${post.$id}`)
+      );
+    } else {
+      dispatch(addPosts(data)).then(() => {
+        if (postId) {
+          navigate(`/post/${postId}`);
+        }
+      });
+    }
+
+    //  navigate(`/`); /* .then((dat) => {
+    /*   if (postId) {
+          console.log(postId);
+          navigate(`/post/${postId}`);
+        }
+      });  */
+    // console.log(
+    //   dispatch(addPosts(data)).then((dat) => {
+    //     console.log(dat);
+    //     if (postId) {
+    //       console.log(postId);
+    //       navigate(`/post/${postId}`);
+    //     }
+    //   })
+    // );
+    /* try {
       if (post) {
         const file = (await data.image[0])
           ? service.uploadFile(data.image[0])
@@ -47,14 +81,13 @@ const PostForm = ({ post }) => {
             ...data,
             userid: userData.$id,
           });
-          if (dbPost) {
-            navigate(`/post/${dbPost.$id}`);
-          }
+          
+          navigate(`/post/${dbPost.$id}`);
         }
       }
     } catch (error) {
       console.log(error);
-    }
+    } */
   };
 
   const slugTransform = useCallback((value) => {
@@ -119,11 +152,7 @@ const PostForm = ({ post }) => {
         />
         {post && (
           <div className="w-full mb-4">
-            <img
-              src={service.getFilePreview(post.featuredimage)}
-              alt={post.title}
-              className="rounded-lg"
-            />
+            <img src={imagePreview} alt={post.title} className="rounded-lg" />
           </div>
         )}
         <Select

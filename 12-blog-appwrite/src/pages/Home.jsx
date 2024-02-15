@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
-import service from "../appwrite/config";
 import { Container, Card } from "../components/index";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { postsThunk } from "../store/features/postSlice";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
+  const posts = useSelector((state) => state.post.posts);
   const authStatus = useSelector((state) => state.auth.status);
+  const dispatch = useDispatch();
   useEffect(() => {
-    service.getAllPosts().then((posts) => {
-      if (posts) {
-        setPosts(posts.documents);
-      }
-    });
-  }, []);
-
+    dispatch(postsThunk());
+  }, [dispatch]);
   if (posts.length === 0 && !authStatus) {
     return (
       <div className="w-full py-8 mt-4 text-center">
