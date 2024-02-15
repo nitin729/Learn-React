@@ -13,13 +13,13 @@ const PostForm = ({ post }) => {
         slug: post?.slug || "",
         content: post?.content || "",
         status: post?.status || "active",
+        featuredimage: post?.featuredimage || null,
       },
     });
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
   const submit = async (data) => {
     try {
-      console.log(data);
       if (post) {
         const file = (await data.image[0])
           ? service.uploadFile(data.image[0])
@@ -35,11 +35,13 @@ const PostForm = ({ post }) => {
           navigate(`/post/${dbPost.$id}`);
         }
       } else {
-        const file = (await data.image[0])
-          ? service.uploadFile(data.image[0])
-          : null;
+        const file = await service.uploadFile(data.image[0]);
+
+        console.log(file);
         if (file) {
           const fileId = file.$id;
+          console.log(fileId);
+
           data.featuredimage = fileId;
           const dbPost = await service.createPost({
             ...data,
@@ -69,7 +71,6 @@ const PostForm = ({ post }) => {
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        console.log("wor");
         setValue("slug", slugTransform(value.title), {
           shouldValidate: true,
         });
@@ -114,7 +115,7 @@ const PostForm = ({ post }) => {
           type="file"
           className="mb-4"
           accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("image", { required: !post })}
+          {...register("image", {})}
         />
         {post && (
           <div className="w-full mb-4">

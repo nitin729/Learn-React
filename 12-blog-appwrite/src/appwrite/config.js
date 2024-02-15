@@ -105,13 +105,10 @@ export class Service {
       return false;
     }
   }
-  async previewFile(fileId) {
-    try {
-      return this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
+
+  getFilePreview(fileId) {
+    console.log(this.bucket.getFilePreview(conf.appwriteBucketId, fileId));
+    return this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
   }
 }
 

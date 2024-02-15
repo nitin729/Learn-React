@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import service from "../appwrite/config";
 import { Container, Card } from "../components/index";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-
+  const authStatus = useSelector((state) => state.auth.status);
   useEffect(() => {
     service.getAllPosts().then((posts) => {
       if (posts) {
@@ -13,7 +14,7 @@ const Home = () => {
     });
   }, []);
 
-  if (posts.length === 0) {
+  if (posts.length === 0 && !authStatus) {
     return (
       <div className="w-full py-8 mt-4 text-center">
         <Container>
