@@ -1,30 +1,36 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, Select, RTE } from "../index";
 import service from "../../appwrite/config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addPosts, editPost } from "../../store/features/postSlice";
+import { addPosts, editPost, getPost } from "../../store/features/postSlice";
 
 const PostForm = ({ post }) => {
-  const { register, handleSubmit, watch, setValue, control, getValues } =
-    useForm({
-      defaultValues: {
-        title: post?.title || "",
-        slug: post?.$id || "",
-        content: post?.content || "",
-        status: post?.status || "active",
-        featuredimage: post?.featuredimage || null,
-      },
-    });
+  //  const post = useSelector((state) => state.post.post);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { slug } = useParams();
   const userData = useSelector((state) => state.auth.userData);
   const postId = useSelector((state) => state.post.postId);
+  const { register, reset, handleSubmit, watch, setValue, control, getValues } =
+    useForm({
+      defaultValues: useMemo(() => {
+        console.log(post);
+        return {
+          title: post?.title || "",
+          slug: post?.$id || "",
+          content: post?.content || "",
+          status: post?.status || "active",
+          featuredimage: post?.featuredimage || null,
+        };
+      }, [post]),
+    });
   const imagePreview =
     post && post.featuredimage
       ? service.getFilePreview(post.featuredimage)
       : "";
+  console.log(post);
   const submit = (data) => {
     if (post) {
       dispatch(editPost({ data, post })).then(() =>
@@ -37,7 +43,6 @@ const PostForm = ({ post }) => {
         }
       });
     }
-
     //  navigate(`/`); /* .then((dat) => {
     /*   if (postId) {
           console.log(postId);
@@ -89,6 +94,9 @@ const PostForm = ({ post }) => {
       console.log(error);
     } */
   };
+  useEffect(() => {
+    dispatch(getPost(slug));
+  }, [slug, dispatch]);
 
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {

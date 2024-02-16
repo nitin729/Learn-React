@@ -9,7 +9,7 @@ const Card = ({ $id, title, featuredimage }) => {
           <img
             src={service.getFilePreview(featuredimage)}
             alt={title}
-            className="rounded-xl"
+            className="rounded-xl h-20 w-40"
           />
         </div>
         <h2 className="text-xl font-bold">{title}</h2>

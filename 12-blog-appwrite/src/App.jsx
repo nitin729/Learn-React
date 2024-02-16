@@ -17,7 +17,6 @@ function App() {
       .then((userData) => {
         if (userData) {
           dispatch(login(userData));
-          dispatch(postsThunk());
         } else {
           dispatch(logout());
         }
@@ -26,13 +25,17 @@ function App() {
   }, []);
 
   return !loading ? (
-    <div className="min-h-screen flex flex-wrap content-between bg-gray-400">
+    <div className="min-h-screen flex flex-wrap content-between bg-stone-300">
       <div className="w-full block">
-        <Header />
-        <main>
+        <div className="sticky top-0 z-50">
+          <Header />
+        </div>
+        <main className="grow">
           <Outlet />
         </main>
-        <Footer />
+        <div>
+          <Footer />
+        </div>
       </div>
     </div>
   ) : null;

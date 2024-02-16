@@ -10,7 +10,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(postsThunk());
   }, [dispatch]);
-  if (posts.length === 0 && !authStatus) {
+  if (posts.length === 0) {
     return (
       <div className="w-full py-8 mt-4 text-center">
         <Container>
@@ -28,9 +28,9 @@ const Home = () => {
   return (
     <div className="w-full py-8">
       <Container>
-        <div className="flex flex-wrap">
+        <div className="flex flex-col justify-center items-center ">
           {posts.map((post) => (
-            <div key={post.$id} className="p-2 w-1/4">
+            <div key={post.$id} className="p-2 w-1/2">
               <Card {...post} />
             </div>
           ))}

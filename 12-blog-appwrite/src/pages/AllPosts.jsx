@@ -8,7 +8,7 @@ const AllPosts = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(postsThunk());
-  }, [dispatch]);
+  }, [posts]);
   return (
     <div className="w-full py-8">
       <Container>
