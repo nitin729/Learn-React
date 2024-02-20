@@ -50,7 +50,7 @@ function App() {
             </div>
             <div className="relative w-full h-0.5">
               <button
-                className="absolute left-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-md bg-blue-600 text-white px-2 py-0.5"
+                className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-md bg-blue-600 text-white px-2 py-0.5"
                 onClick={swap}
               >
                 swap
@@ -69,7 +69,7 @@ function App() {
                 onCurrencyChange={(currency) => setTo(currency)}
               />
             </div>
-            <button className="bg-white w-full rounded-lg bg-black text-white px-2 py-2 mt-2">
+            <button className="bg-white w-full rounded-lg bg-black text-black px-2 py-2 mt-2 hover:bg-blue-600">
               Convert
             </button>
           </form>
